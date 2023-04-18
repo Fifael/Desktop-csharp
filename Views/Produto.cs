@@ -43,25 +43,128 @@ namespace Views {
                 Adicionar(); 
             };
             
-            var produtoSelecionado = (Models.Produto)lista.SelectedItems[0].Tag;
             
             Button btnEdit = new Button();
             btnEdit.Text = "Editar";
             btnEdit.Top = 300;
             btnEdit.Left = 100;
             btnEdit.Size = new System.Drawing.Size(100, 25);
-            btnAdd.Click += (sender, e) => {
-                Editar(produtoSelecionado.id); 
+            btnEdit.Click += (sender, e) => {
+                string id = lista.SelectedItems[0].Text;
+                Editar(Int32.Parse(id)); 
+            };
+
+
+            Button BtnRemove = new Button();
+            BtnRemove.Text = "remove";
+            BtnRemove.Top = 300;
+            BtnRemove.Left = 200;
+            BtnRemove.Size = new System.Drawing.Size(100, 25);
+            BtnRemove.Click += (sender, e) => {
+                string id = lista.SelectedItems[0].Text;
+                Remove(Int32.Parse(id));
+            };
+
+            Button BtnVoltar = new Button();
+            BtnVoltar.Text = "Voltar";
+            BtnVoltar.Top = 300;
+            BtnVoltar.Left = 300;
+            BtnVoltar.Size = new System.Drawing.Size(100, 25);
+            BtnVoltar.Click += (sender, e) => {
+                produtos.Hide();
+                produtos.Close();
             };
 
             produtos.Controls.Add(lista);
             produtos.Controls.Add(btnAdd);
             produtos.Controls.Add(btnEdit);
+            produtos.Controls.Add(BtnRemove);
+            produtos.Controls.Add(BtnVoltar);
             produtos.ShowDialog();
         } 
 
 
-        public static void Adicionar() {
+        public static void Editar(int id) {
+            Models.Produto produto = Controllers.Produto.BuscaProduto(id);
+            Form editar = new Form();
+            editar.Text = "Editar Produto";
+            editar.Size = new System.Drawing.Size(400, 400);
+            editar.StartPosition = FormStartPosition.CenterScreen;
+            editar.FormBorderStyle = FormBorderStyle.FixedSingle;
+            editar.MaximizeBox = false;
+            editar.MinimizeBox = false;
+
+            Label lblId= new Label();
+            lblId.Text = "ID";
+            lblId.Top = 0;
+            lblId.Left = 0;
+            lblId.Size = new System.Drawing.Size(100, 25);
+
+            TextBox txtId = new TextBox();
+            txtId.Top = 0;
+            txtId.Left = 100;
+            txtId.Size = new System.Drawing.Size(100, 25);
+            txtId.Text = produto.id.ToString();
+
+            Label lblNome = new Label();
+            lblNome.Text = "Nome";
+            lblNome.Top = 25;
+            lblNome.Left = 0;
+            lblNome.Size = new System.Drawing.Size(100, 25);
+
+            TextBox txtNome = new TextBox();
+            txtNome.Top = 25;
+            txtNome.Left = 100;
+            txtNome.Size = new System.Drawing.Size(100, 25);
+            txtNome.Text = produto.nome;
+
+            Label lblPreco = new Label();
+            lblPreco.Text = "Preço";
+            lblPreco.Top = 50;
+            lblPreco.Left = 0;
+            lblPreco.Size = new System.Drawing.Size(100, 25);
+
+            TextBox txtPreco = new TextBox();
+            txtPreco.Top = 50;
+            txtPreco.Left = 100;
+            txtPreco.Size = new System.Drawing.Size(100, 25);
+            txtPreco.Text = produto.preco.ToString();
+
+            Button btnSalvar = new Button();
+            btnSalvar.Text = "Salvar";
+            btnSalvar.Top = 75;
+            btnSalvar.Left = 0;
+            btnSalvar.Size = new System.Drawing.Size(100, 25);
+            btnSalvar.Click += (sender, e) => {
+                Controllers.Produto.AlteraProduto(id, txtNome.Text, float.Parse(txtPreco.Text));
+                Listar();
+
+                editar.Hide();
+                editar.Close();
+            };
+
+            Button btnCancelar = new Button();
+            btnCancelar.Text = "Cancelar";
+            btnCancelar.Top = 75;
+            btnCancelar.Left = 100;
+            btnCancelar.Size = new System.Drawing.Size(100, 25);
+            btnCancelar.Click += (sender, e) => {
+                editar.Close();
+               
+            };
+
+            editar.Controls.Add(lblId);
+            editar.Controls.Add(txtId);
+            editar.Controls.Add(lblNome);
+            editar.Controls.Add(txtNome);
+            editar.Controls.Add(lblPreco);
+            editar.Controls.Add(txtPreco);
+            editar.Controls.Add(btnSalvar);
+            editar.Controls.Add(btnCancelar);
+            editar.ShowDialog();
+    }
+
+    public static void Adicionar() {
             Form adicionar = new Form();
             adicionar.Text = "Adicionar Produto";
             adicionar.Size = new System.Drawing.Size(400, 400);
@@ -111,8 +214,9 @@ namespace Views {
             btnSalvar.Size = new System.Drawing.Size(100, 25);
             btnSalvar.Click += (sender, e) => {
                 Controllers.Produto.AdicionaProduto(int.Parse(txtId.Text), txtNome.Text, float.Parse(txtPreco.Text));
+                adicionar.Hide();
                 Listar();
-                adicionar.Close();
+                
             };
 
             Button btnCancelar = new Button();
@@ -134,82 +238,43 @@ namespace Views {
             adicionar.Controls.Add(btnCancelar);
             adicionar.ShowDialog();
         }
-        public static void Editar(int id) {
-            Form editar = new Form();
-            editar.Text = "Editar Produto";
-            editar.Size = new System.Drawing.Size(400, 400);
-            editar.StartPosition = FormStartPosition.CenterScreen;
-            editar.FormBorderStyle = FormBorderStyle.FixedSingle;
-            editar.MaximizeBox = false;
-            editar.MinimizeBox = false;
 
-            Label lblId= new Label();
-            lblId.Text = "ID";
-            lblId.Top = 0;
-            lblId.Left = 0;
-            lblId.Size = new System.Drawing.Size(100, 25);
+    public static void Remove(int id) {
 
-            TextBox txtId = new TextBox();
-            txtId.Top = 0;
-            txtId.Left = 100;
-            txtId.Size = new System.Drawing.Size(100, 25);
+        Form remove = new Form();
+        remove.Text = "Remover Produto";
+        remove.Size = new System.Drawing.Size(100, 100);
+        remove.StartPosition = FormStartPosition.CenterScreen;
+        remove.FormBorderStyle = FormBorderStyle.FixedSingle;
+        remove.MaximizeBox = false;
+        remove.MinimizeBox = false;
 
-            Label lblNome = new Label();
-            lblNome.Text = "Nome";
-            lblNome.Top = 25;
-            lblNome.Left = 0;
-            lblNome.Size = new System.Drawing.Size(100, 25);
+        Button sim = new Button();
+        sim.Text = "Sim";
+        sim.Top = 0;
+        sim.Left = 0;
+        sim.Size = new System.Drawing.Size(50, 25);
+        sim.Click += (sender, e) => {
+            Controllers.Produto.RemoveProduto(id);
+            Listar();
+            remove.Close();
+        };
 
-            TextBox txtNome = new TextBox();
-            txtNome.Top = 25;
-            txtNome.Left = 100;
-            txtNome.Size = new System.Drawing.Size(100, 25);
+        Button nao = new Button();
+        nao.Text = "Não";
+        nao.Top = 0;
+        nao.Left = 50;
+        nao.Size = new System.Drawing.Size(50, 25);
+        nao.Click += (sender, e) => {
+            Listar();
+            remove.Hide();
+            remove.Close();
+        };
 
-            Label lblPreco = new Label();
-            lblPreco.Text = "Preço";
-            lblPreco.Top = 50;
-            lblPreco.Left = 0;
-            lblPreco.Size = new System.Drawing.Size(100, 25);
-
-            TextBox txtPreco = new TextBox();
-            txtPreco.Top = 50;
-            txtPreco.Left = 100;
-            txtPreco.Size = new System.Drawing.Size(100, 25);
-
-            Button btnSalvar = new Button();
-            btnSalvar.Text = "Salvar";
-            btnSalvar.Top = 75;
-            btnSalvar.Left = 0;
-            btnSalvar.Size = new System.Drawing.Size(100, 25);
-            btnSalvar.Click += (sender, e) => {
-                Controllers.Produto.AlteraProduto(id, txtNome.Text, float.Parse(txtPreco.Text));
-                Listar();
-                editar.Close();
-            };
-
-            Button btnCancelar = new Button();
-            btnCancelar.Text = "Cancelar";
-            btnCancelar.Top = 75;
-            btnCancelar.Left = 100;
-            btnCancelar.Size = new System.Drawing.Size(100, 25);
-            btnCancelar.Click += (sender, e) => {
-                editar.Close();
-            };
-
-            editar.Controls.Add(lblId);
-            editar.Controls.Add(txtId);
-            editar.Controls.Add(lblNome);
-            editar.Controls.Add(txtNome);
-            editar.Controls.Add(lblPreco);
-            editar.Controls.Add(txtPreco);
-            editar.Controls.Add(btnSalvar);
-            editar.Controls.Add(btnCancelar);
-            editar.ShowDialog();
-            
-            
-
-
-
+        remove.Controls.Add(sim);
+        remove.Controls.Add(nao);   
+        remove.ShowDialog();
     }
     }
 }
+

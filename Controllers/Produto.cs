@@ -19,6 +19,11 @@ using System.Linq;
             {
                 Models.Produto.RemoveProduto(id);
             }
+
+            public static Models.Produto BuscaProduto (int id) 
+            {
+                return Models.Produto.BuscaProduto(id);
+            }
     
             public static List<Models.Produto> ListaProdutos () 
             {
