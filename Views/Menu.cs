@@ -9,7 +9,7 @@ namespace Views {
 
             Form menu = new Form();
             menu.Text = "Menu";
-            menu.Size = new System.Drawing.Size(300, 300);
+            menu.Size = new System.Drawing.Size(190, 150);
             menu.StartPosition = FormStartPosition.CenterScreen;
             menu.FormBorderStyle = FormBorderStyle.FixedSingle;
             menu.MaximizeBox = false;
@@ -17,16 +17,34 @@ namespace Views {
 
             Button btnAdd = new Button();
             btnAdd.Text = "Produtos";
-            btnAdd.Size = new System.Drawing.Size(100, 50);
-            btnAdd.Location = new System.Drawing.Point(100, 100);
+            btnAdd.AutoSize = true;
+            btnAdd.Location = new System.Drawing.Point(50, 25);
+            btnAdd.BackColor = Color.Transparent;
+            btnAdd.ForeColor = Color.Black;
+            btnAdd.FlatStyle = FlatStyle.Flat;
+            btnAdd.MouseHover += (sender, e) => {
+                btnAdd.BackColor = Color.SkyBlue;
+            };
+            btnAdd.MouseLeave += (sender, e) => {
+                btnAdd.BackColor = Color.Transparent;
+            };
             btnAdd.Click += (sender, e) => {
                 Produtos.Listar();
             };
             
             Button sair = new Button();
             sair.Text = "Sair";
-            sair.Size = new System.Drawing.Size(100, 50);
-            sair.Location = new System.Drawing.Point(100, 200);
+            sair.AutoSize = true;
+            sair.Location = new System.Drawing.Point( 50 , 60);
+            sair.BackColor = Color.Transparent;
+            sair.ForeColor = Color.Black;
+            sair.FlatStyle = FlatStyle.Flat;
+            sair.MouseHover += (sender, e) => {
+                sair.BackColor = Color.SkyBlue;
+            };
+            sair.MouseLeave += (sender, e) => {
+                sair.BackColor = Color.Transparent;
+            };
             sair.Click += (sender, e) => {
                 menu.Close();
             };

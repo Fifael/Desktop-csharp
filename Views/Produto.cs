@@ -19,8 +19,8 @@ namespace Views {
             lista.Location = new System.Drawing.Point(0, 0);
             lista.View = View.Details;
             lista.Columns.Add("ID", 50);
-            lista.Columns.Add("Nome", 100);
-            lista.Columns.Add("Preço", 100);
+            lista.Columns.Add("Nome", 200);
+            lista.Columns.Add("Preço", 145);
             lista.FullRowSelect = true;
             lista.GridLines = true;
             lista.MultiSelect = false;
@@ -39,8 +39,19 @@ namespace Views {
             btnAdd.Top = 300;
             btnAdd.Left = 0;
             btnAdd.Size = new System.Drawing.Size(100, 25);
+            btnAdd.BackColor = Color.Transparent;
+            btnAdd.ForeColor = Color.Black;
+            btnAdd.FlatStyle = FlatStyle.Flat;
+            btnAdd.MouseHover += (sender, e) => {
+                btnAdd.BackColor = Color.SkyBlue;
+            };
+            btnAdd.MouseLeave += (sender, e) => {
+                btnAdd.BackColor = Color.Transparent;
+            };
             btnAdd.Click += (sender, e) => {
-                Adicionar(); 
+                produtos.Close();
+                produtos.Dispose();
+                Adicionar();   
             };
             
             
@@ -49,20 +60,43 @@ namespace Views {
             btnEdit.Top = 300;
             btnEdit.Left = 100;
             btnEdit.Size = new System.Drawing.Size(100, 25);
+            btnEdit.BackColor = Color.Transparent;
+            btnEdit.ForeColor = Color.Black;
+            btnEdit.FlatStyle = FlatStyle.Flat;
+            btnEdit.MouseHover += (sender, e) => {
+                btnEdit.BackColor = Color.SkyBlue;
+            };
+            btnEdit.MouseLeave += (sender, e) => {
+                btnEdit.BackColor = Color.Transparent;
+            };
             btnEdit.Click += (sender, e) => {
                 string id = lista.SelectedItems[0].Text;
-                Editar(Int32.Parse(id)); 
+                produtos.Close();
+                produtos.Dispose();
+                Editar(Int32.Parse(id));
+                produtos.Close();
             };
 
 
             Button BtnRemove = new Button();
-            BtnRemove.Text = "remove";
+            BtnRemove.Text = "Remove";
             BtnRemove.Top = 300;
             BtnRemove.Left = 200;
             BtnRemove.Size = new System.Drawing.Size(100, 25);
+            BtnRemove.BackColor = Color.Transparent;
+            BtnRemove.ForeColor = Color.Black;
+            BtnRemove.FlatStyle = FlatStyle.Flat;
+            BtnRemove.MouseHover += (sender, e) => {
+                BtnRemove.BackColor = Color.SkyBlue;
+            };
+            BtnRemove.MouseLeave += (sender, e) => {
+                BtnRemove.BackColor = Color.Transparent;
+            };
             BtnRemove.Click += (sender, e) => {
                 string id = lista.SelectedItems[0].Text;
                 Remove(Int32.Parse(id));
+                produtos.Dispose();
+                produtos.Close();  
             };
 
             Button BtnVoltar = new Button();
@@ -70,9 +104,19 @@ namespace Views {
             BtnVoltar.Top = 300;
             BtnVoltar.Left = 300;
             BtnVoltar.Size = new System.Drawing.Size(100, 25);
+            BtnVoltar.BackColor = Color.Transparent;
+            BtnVoltar.ForeColor = Color.Black;
+            BtnVoltar.FlatStyle = FlatStyle.Flat;
+            BtnVoltar.MouseHover += (sender, e) => {
+                BtnVoltar.BackColor = Color.SkyBlue;
+            };
+            BtnVoltar.MouseLeave += (sender, e) => {
+                BtnVoltar.BackColor = Color.Transparent;
+            };
             BtnVoltar.Click += (sender, e) => {
                 produtos.Hide();
                 produtos.Close();
+                produtos.Dispose();
             };
 
             produtos.Controls.Add(lista);
@@ -137,10 +181,10 @@ namespace Views {
             btnSalvar.Size = new System.Drawing.Size(100, 25);
             btnSalvar.Click += (sender, e) => {
                 Controllers.Produto.AlteraProduto(id, txtNome.Text, float.Parse(txtPreco.Text));
-                Listar();
-
                 editar.Hide();
                 editar.Close();
+                editar.Dispose();
+                Listar();
             };
 
             Button btnCancelar = new Button();
@@ -215,6 +259,8 @@ namespace Views {
             btnSalvar.Click += (sender, e) => {
                 Controllers.Produto.AdicionaProduto(int.Parse(txtId.Text), txtNome.Text, float.Parse(txtPreco.Text));
                 adicionar.Hide();
+                adicionar.Close();
+                adicionar.Dispose();
                 Listar();
                 
             };
@@ -256,8 +302,9 @@ namespace Views {
         sim.Size = new System.Drawing.Size(50, 25);
         sim.Click += (sender, e) => {
             Controllers.Produto.RemoveProduto(id);
-            Listar();
             remove.Close();
+            remove.Dispose();
+            Listar();          
         };
 
         Button nao = new Button();
@@ -266,9 +313,10 @@ namespace Views {
         nao.Left = 50;
         nao.Size = new System.Drawing.Size(50, 25);
         nao.Click += (sender, e) => {
-            Listar();
             remove.Hide();
             remove.Close();
+            remove.Dispose();
+            Listar();
         };
 
         remove.Controls.Add(sim);
