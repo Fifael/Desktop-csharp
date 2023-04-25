@@ -8,7 +8,7 @@ namespace Views {
         public static void Listar() {
             Form produtos = new Form();
             produtos.Text = "Produtos";
-            produtos.Size = new System.Drawing.Size(400, 400);
+            produtos.Size = new System.Drawing.Size(418, 366);
             produtos.StartPosition = FormStartPosition.CenterScreen;
             produtos.FormBorderStyle = FormBorderStyle.FixedSingle;
             produtos.MaximizeBox = false;
@@ -132,7 +132,7 @@ namespace Views {
             Models.Produto produto = Controllers.Produto.BuscaProduto(id);
             Form editar = new Form();
             editar.Text = "Editar Produto";
-            editar.Size = new System.Drawing.Size(400, 400);
+            editar.Size = new System.Drawing.Size(200, 200);
             editar.StartPosition = FormStartPosition.CenterScreen;
             editar.FormBorderStyle = FormBorderStyle.FixedSingle;
             editar.MaximizeBox = false;
@@ -194,7 +194,7 @@ namespace Views {
             btnCancelar.Size = new System.Drawing.Size(100, 25);
             btnCancelar.Click += (sender, e) => {
                 editar.Close();
-               
+                editar.Dispose();
             };
 
             editar.Controls.Add(lblId);
@@ -211,22 +211,11 @@ namespace Views {
     public static void Adicionar() {
             Form adicionar = new Form();
             adicionar.Text = "Adicionar Produto";
-            adicionar.Size = new System.Drawing.Size(400, 400);
+            adicionar.Size = new System.Drawing.Size(220, 140);
             adicionar.StartPosition = FormStartPosition.CenterScreen;
             adicionar.FormBorderStyle = FormBorderStyle.FixedSingle;
             adicionar.MaximizeBox = false;
             adicionar.MinimizeBox = false;
-
-            Label lblId= new Label();
-            lblId.Text = "ID";
-            lblId.Top = 0;
-            lblId.Left = 0;
-            lblId.Size = new System.Drawing.Size(100, 25);
-
-            TextBox txtId = new TextBox();
-            txtId.Top = 0;
-            txtId.Left = 100;
-            txtId.Size = new System.Drawing.Size(100, 25);
 
 
             Label lblNome = new Label();
@@ -257,12 +246,26 @@ namespace Views {
             btnSalvar.Left = 0;
             btnSalvar.Size = new System.Drawing.Size(100, 25);
             btnSalvar.Click += (sender, e) => {
-                Controllers.Produto.AdicionaProduto(int.Parse(txtId.Text), txtNome.Text, float.Parse(txtPreco.Text));
-                adicionar.Hide();
-                adicionar.Close();
-                adicionar.Dispose();
-                Listar();
-                
+                try
+                {
+                    Controllers.Produto.AdicionaProduto(txtNome.Text, float.Parse(txtPreco.Text));
+                    adicionar.Hide();
+                    adicionar.Close();
+                    adicionar.Dispose();
+                    Listar();
+                }
+                catch
+                {
+                    MessageBox.Show("Erro ao adicionar produto");
+                }
+                finally 
+                {
+                    adicionar.Hide();
+                    adicionar.Close();
+                    adicionar.Dispose();
+                    Listar();                    
+                }
+                               
             };
 
             Button btnCancelar = new Button();
@@ -274,8 +277,6 @@ namespace Views {
                 adicionar.Close();
             };
 
-            adicionar.Controls.Add(lblId);
-            adicionar.Controls.Add(txtId);
             adicionar.Controls.Add(lblNome);
             adicionar.Controls.Add(txtNome);
             adicionar.Controls.Add(lblPreco);

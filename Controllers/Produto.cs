@@ -5,14 +5,18 @@ using System.Linq;
     namespace Controllers {
 
         public class Produto {
-            public static void AdicionaProduto (int id, string nome, float preco) 
+            public static void AdicionaProduto (string nome, float preco) 
             {
-                Models.Produto.AdicionaProduto(new Models.Produto(id, nome, preco));
+                try {   
+                    new Models.Produto(nome, preco);
+                } catch {
+                    throw new Exception("ERRO");
+                }
             }
 
             public static void AlteraProduto (int id, string nome, float preco) 
             {
-                Models.Produto.AlteraProduto(new Models.Produto(id, nome, preco));
+                Models.Produto.AlteraProduto(id, nome, preco);
             }
     
             public static void RemoveProduto (int id) 
@@ -27,7 +31,8 @@ using System.Linq;
     
             public static List<Models.Produto> ListaProdutos () 
             {
-                return Models.Produto.Produtos;
+                Repository.Context context = new Repository.Context();
+                return (from p in context.Produtos select p).ToList();
             }
 
         }
