@@ -5,6 +5,9 @@ namespace Views {
 
     public class Almoxerifado {
 
+        public static bool isOpen = false;
+        public static Form produtos;
+
         public static void Listar() {
             Form produtos = new Form();
             produtos.Text = "Almoxerifado";
@@ -69,11 +72,19 @@ namespace Views {
                 btnEdit.BackColor = Color.Transparent;
             };
             btnEdit.Click += (sender, e) => {
-                string id = lista.SelectedItems[0].Text;
-                produtos.Close();
-                produtos.Dispose();
-                Editar(Int32.Parse(id));
-                produtos.Close();
+                try
+                {
+                    string id = lista.SelectedItems[0].Text;
+                    produtos.Close();
+                    produtos.Dispose();
+                    Editar(Int32.Parse(id));
+                    produtos.Close(); 
+                }
+                catch
+                {
+                    MessageBox.Show("Selecione um Almoxerifado para editar");
+                }
+                
             };
 
 
@@ -92,11 +103,19 @@ namespace Views {
                 BtnRemove.BackColor = Color.Transparent;
             };
             BtnRemove.Click += (sender, e) => {
-                string id = lista.SelectedItems[0].Text;
-                produtos.Close();
-                produtos.Dispose();
-                Remover(Int32.Parse(id));
-                produtos.Close();      
+                try
+                {
+                    string id = lista.SelectedItems[0].Text;
+                    produtos.Close();
+                    produtos.Dispose();
+                    Remover(Int32.Parse(id));
+                    produtos.Close();  
+                }
+                catch
+                {
+                    MessageBox.Show("Selecione um Almoxerifado para remover");
+                }
+                      
             };
 
             Button BtnVoltar = new Button();
@@ -269,12 +288,13 @@ namespace Views {
             btnVoltar.Left = 100;
             btnVoltar.Size = new System.Drawing.Size(100, 25);
             btnVoltar.Click += (sender, e) => {
-            remover.Hide();
-            remover.Close();
-            remover.Dispose();
-            Listar();
+                if(isOpen){
+                    remover.Close();
+                    produtos.Close();
+                    produtos.Dispose();
+                }    
+                Listar();
             };
-
             remover.Controls.Add(lblNome);
             remover.Controls.Add(txtNome);
             remover.Controls.Add(btnRemover);

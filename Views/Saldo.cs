@@ -1,8 +1,14 @@
-namespace Views {
+namespace Views
+{
 
-    public class Saldo {
-            
-            public static void Listar() {
+    public class Saldo
+    {
+
+        public static bool isOpen = false;
+        public static Form produtos;
+
+        public static void Listar()
+        {
             Form produtos = new Form();
             produtos.Text = "Saldos";
             produtos.Size = new System.Drawing.Size(418, 366);
@@ -26,7 +32,8 @@ namespace Views {
 
 
             List<Models.Saldo> saldosList = Controllers.Saldo.Read();
-            foreach (Models.Saldo saldo in saldosList) {
+            foreach (Models.Saldo saldo in saldosList)
+            {
                 ListViewItem item = new ListViewItem(saldo.Id.ToString());
                 item.SubItems.Add(Controllers.Produto.BuscaProduto(saldo.ProdutoId).nome);
                 item.SubItems.Add(Controllers.Almoxerifado.BuscaAlmoxerifado(saldo.AlmoxerifadoId).nome);
@@ -42,16 +49,20 @@ namespace Views {
             btnAdd.BackColor = Color.Transparent;
             btnAdd.ForeColor = Color.Black;
             btnAdd.FlatStyle = FlatStyle.Flat;
-            btnAdd.MouseHover += (sender, e) => {
+            btnAdd.MouseHover += (sender, e) =>
+            {
                 btnAdd.BackColor = Color.SkyBlue;
             };
-            btnAdd.MouseLeave += (sender, e) => {
+            btnAdd.MouseLeave += (sender, e) =>
+            {
                 btnAdd.BackColor = Color.Transparent;
             };
-            btnAdd.Click += delegate (object sender, EventArgs e) {
+            btnAdd.Click += (sender, e) =>
+            {
                 produtos.Close();
                 produtos.Dispose();
                 Adicionar();
+                produtos.Close();
             };
 
             Button btnEdit = new Button();
@@ -62,18 +73,28 @@ namespace Views {
             btnEdit.BackColor = Color.Transparent;
             btnEdit.ForeColor = Color.Black;
             btnEdit.FlatStyle = FlatStyle.Flat;
-            btnEdit.MouseHover += (sender, e) => {
+            btnEdit.MouseHover += (sender, e) =>
+            {
                 btnEdit.BackColor = Color.SkyBlue;
             };
-            btnEdit.MouseLeave += (sender, e) => {
+            btnEdit.MouseLeave += (sender, e) =>
+            {
                 btnEdit.BackColor = Color.Transparent;
             };
-            btnEdit.Click += (sender, e) => {
+            btnEdit.Click += (sender, e) =>
+            {
+                try
+                {
                 string id = lista.SelectedItems[0].Text;
                 produtos.Close();
                 produtos.Dispose();
-                Editar(Int32.Parse(id));
-                produtos.Close();
+                Editar(Int32.Parse(id)); 
+                }
+                catch
+                {
+                    MessageBox.Show("Selecione um Saldo para editar");
+                }
+                
             };
 
 
@@ -85,18 +106,29 @@ namespace Views {
             BtnRemove.BackColor = Color.Transparent;
             BtnRemove.ForeColor = Color.Black;
             BtnRemove.FlatStyle = FlatStyle.Flat;
-            BtnRemove.MouseHover += (sender, e) => {
+            BtnRemove.MouseHover += (sender, e) =>
+            {
                 BtnRemove.BackColor = Color.SkyBlue;
             };
-            BtnRemove.MouseLeave += (sender, e) => {
+            BtnRemove.MouseLeave += (sender, e) =>
+            {
                 BtnRemove.BackColor = Color.Transparent;
             };
-            BtnRemove.Click += (sender, e) => {
-                string id = lista.SelectedItems[0].Text;
-                produtos.Close();
-                produtos.Dispose();
-                Remover(Int32.Parse(id));
-                produtos.Close();      
+            BtnRemove.Click += (sender, e) =>
+            {
+                try
+                {
+                    string id = lista.SelectedItems[0].Text;
+                    produtos.Close();
+                    produtos.Dispose();
+                    Remover(Int32.Parse(id));
+                    produtos.Close();
+                }
+                catch
+                {
+                    MessageBox.Show("Selecione um Saldo para Remover");
+                }
+                
             };
 
             Button BtnVoltar = new Button();
@@ -107,13 +139,16 @@ namespace Views {
             BtnVoltar.BackColor = Color.Transparent;
             BtnVoltar.ForeColor = Color.Black;
             BtnVoltar.FlatStyle = FlatStyle.Flat;
-            BtnVoltar.MouseHover += (sender, e) => {
+            BtnVoltar.MouseHover += (sender, e) =>
+            {
                 BtnVoltar.BackColor = Color.SkyBlue;
             };
-            BtnVoltar.MouseLeave += (sender, e) => {
+            BtnVoltar.MouseLeave += (sender, e) =>
+            {
                 BtnVoltar.BackColor = Color.Transparent;
             };
-            BtnVoltar.Click += (sender, e) => {
+            BtnVoltar.Click += (sender, e) =>
+            {
                 produtos.Hide();
                 produtos.Close();
                 produtos.Dispose();
@@ -126,10 +161,11 @@ namespace Views {
             produtos.Controls.Add(BtnVoltar);
             produtos.ShowDialog();
 
-            }
+        }
 
 
-            public static void Adicionar() {
+        public static void Adicionar()
+        {
             Form adicionar = new Form();
             adicionar.Text = "Adicionar Saldo";
             adicionar.Size = new System.Drawing.Size(418, 366);
@@ -157,7 +193,7 @@ namespace Views {
 
             TextBox txtAlmoxarifado = new TextBox();
             txtAlmoxarifado.Top = 50;
-            txtAlmoxarifado.Left = 100; 
+            txtAlmoxarifado.Left = 100;
             txtAlmoxarifado.Size = new System.Drawing.Size(100, 25);
 
             Label lblQuantidade = new Label();
@@ -176,25 +212,26 @@ namespace Views {
             btnSalvar.Top = 100;
             btnSalvar.Left = 0;
             btnSalvar.Size = new System.Drawing.Size(100, 25);
-            btnSalvar.Click += (sender, e) => {
+            btnSalvar.Click += (sender, e) =>
+            {
                 try
                 {
                     Controllers.Saldo.Create(Int32.Parse(txtProduto.Text), Int32.Parse(txtAlmoxarifado.Text), Int32.Parse(txtQuantidade.Text));
                     adicionar.Hide();
                     adicionar.Close();
                     adicionar.Dispose();
-                    Listar(); 
+                    Listar();
                 }
                 catch
                 {
                     MessageBox.Show("Erro ao adicionar produto");
                 }
-                finally 
+                finally
                 {
                     adicionar.Hide();
                     adicionar.Close();
                     adicionar.Dispose();
-                    Listar();                    
+                    Listar();
                 }
             };
 
@@ -203,7 +240,8 @@ namespace Views {
             btnCancelar.Top = 100;
             btnCancelar.Left = 100;
             btnCancelar.Size = new System.Drawing.Size(100, 25);
-            btnCancelar.Click += (sender, e) => {
+            btnCancelar.Click += (sender, e) =>
+            {
                 adicionar.Close();
                 adicionar.Dispose();
                 adicionar.Hide();
@@ -218,9 +256,10 @@ namespace Views {
             adicionar.Controls.Add(btnSalvar);
             adicionar.Controls.Add(btnCancelar);
             adicionar.ShowDialog();
-            }
+        }
 
-            public static void Editar(int id) {
+        public static void Editar(int id)
+        {
             Models.Saldo saldo = Controllers.Saldo.BuscaSaldo(id);
             Form editar = new Form();
             editar.Text = "Editar Saldo";
@@ -229,7 +268,7 @@ namespace Views {
             editar.FormBorderStyle = FormBorderStyle.FixedSingle;
             editar.MaximizeBox = false;
             editar.MinimizeBox = false;
-            
+
             Label lblProduto = new Label();
             lblProduto.Text = "Produto";
             lblProduto.Top = 25;
@@ -241,7 +280,7 @@ namespace Views {
             txtProduto.Left = 100;
             txtProduto.Size = new System.Drawing.Size(100, 25);
             txtProduto.Text = Controllers.Saldo.BuscaSaldo(id).ProdutoId.ToString();
-            
+
             Label lblAlmoxarifado = new Label();
             lblAlmoxarifado.Text = "Almoxarifado";
             lblAlmoxarifado.Top = 50;
@@ -271,25 +310,26 @@ namespace Views {
             btnSalvar.Top = 100;
             btnSalvar.Left = 0;
             btnSalvar.Size = new System.Drawing.Size(100, 25);
-            btnSalvar.Click += (sender, e) => {
+            btnSalvar.Click += (sender, e) =>
+            {
                 try
                 {
                     Controllers.Saldo.Update(id, Int32.Parse(txtProduto.Text), Int32.Parse(txtAlmoxarifado.Text), Int32.Parse(txtQuantidade.Text));
                     editar.Hide();
                     editar.Close();
                     editar.Dispose();
-                    Listar(); 
+                    Listar();
                 }
                 catch
                 {
                     MessageBox.Show("Erro ao editar");
                 }
-                finally 
+                finally
                 {
                     editar.Hide();
                     editar.Close();
                     editar.Dispose();
-                    Listar();                    
+                    Listar();
                 }
             };
 
@@ -298,7 +338,8 @@ namespace Views {
             btnCancelar.Top = 100;
             btnCancelar.Left = 100;
             btnCancelar.Size = new System.Drawing.Size(100, 25);
-            btnCancelar.Click += (sender, e) => {
+            btnCancelar.Click += (sender, e) =>
+            {
                 editar.Close();
                 editar.Dispose();
                 editar.Hide();
@@ -313,9 +354,10 @@ namespace Views {
             editar.Controls.Add(btnSalvar);
             editar.Controls.Add(btnCancelar);
             editar.ShowDialog();
-            }
-            
-            public static void Remover(int id) {
+        }
+
+        public static void Remover(int id)
+        {
             Form remover = new Form();
             remover.Text = "Remover Saldo";
             remover.Size = new System.Drawing.Size(418, 366);
@@ -324,30 +366,37 @@ namespace Views {
             remover.MaximizeBox = false;
             remover.MinimizeBox = false;
 
+            Label confirm = new Label();
+            confirm.Text = "Deseja realmente remover o produto?";
+            confirm.Top = 0;
+            confirm.Left = 0;
+            confirm.Size = new System.Drawing.Size(200, 40);
+
             Button sim = new Button();
             sim.Text = "Sim";
             sim.Top = 0;
             sim.Left = 0;
             sim.Size = new System.Drawing.Size(50, 25);
-            sim.Click += (sender, e) => {
+            sim.Click += (sender, e) =>
+            {
                 try
                 {
                     Controllers.Saldo.Delete(id);
                     remover.Hide();
                     remover.Close();
                     remover.Dispose();
-                    Listar(); 
+                    Listar();
                 }
                 catch
                 {
                     MessageBox.Show("Erro ao remover");
                 }
-                finally 
+                finally
                 {
                     remover.Hide();
                     remover.Close();
                     remover.Dispose();
-                    Listar();                    
+                    Listar();
                 }
             };
 
@@ -355,17 +404,17 @@ namespace Views {
             nao.Text = "Não";
             nao.Top = 0;
             nao.Left = 50;
-            nao.Size = new System.Drawing.Size(50, 25); 
-            nao.Click += (sender, e) => {
-                remover.Hide();
-                remover.Close();
-                remover.Dispose();
+            nao.Size = new System.Drawing.Size(50, 25);
+            nao.Click += (sender, e) =>
+            {
+                if (isOpen)
+                {
+                    remover.Close();
+                    produtos.Close();
+                    produtos.Dispose();
+                }
+                Listar();
             };
-
-
-            remover.Controls.Add(sim);
-            remover.Controls.Add(nao);
-            remover.ShowDialog();
-            }
-    } 
+        }
+    }
 }
